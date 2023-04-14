@@ -20,7 +20,7 @@ public interface JoinDao {
 	 * 회원가입
 	 * @param user
 	 */
-	public void join(Join user);
+	public int userRegister(Join user);
 	
 	/**
 	 * 로그인

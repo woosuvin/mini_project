@@ -1,6 +1,8 @@
 package edu.java.project.model;
 
-public class Join {
+import java.io.Serializable;
+
+public class Join implements Serializable {
 	public interface Entity {
 		String TBL_NAME = "USERJOIN";
 		String COL_NO = "NO";
