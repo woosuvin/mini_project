@@ -4,15 +4,20 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
-public class mainFrame {
+import edu.java.project.controller.JoinDaoImpl;
+
+public class LogInFrame {
+	JoinDaoImpl dao = new JoinDaoImpl();
 
 	private JFrame frame;
-	private JLabel lblLogin;
-	private JButton btnNewButton_1;
-	private JButton btnNewButton;
+	private JButton btnSignUp;
+	private JButton btnSignIn;
 	private JLabel lblId;
 	private JLabel lblPassword;
 	private JTextField textId;
@@ -26,7 +31,7 @@ public class mainFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					mainFrame window = new mainFrame();
+					LogInFrame window = new LogInFrame();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -38,7 +43,7 @@ public class mainFrame {
 	/**
 	 * Create the application.
 	 */
-	public mainFrame() {
+	public LogInFrame() {
 		initialize();
 	}
 
@@ -59,17 +64,26 @@ public class mainFrame {
 		lblPassword.setBounds(54, 354, 57, 15);
 		frame.getContentPane().add(lblPassword);
 		
-		btnNewButton = new JButton("New button");
-		btnNewButton.setBounds(55, 459, 97, 23);
-		frame.getContentPane().add(btnNewButton);
+		btnSignIn = new JButton("Sign In");
+		btnSignIn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				logIn();
+				
+			}
+		});
+		btnSignIn.setBounds(63, 469, 97, 23);
+		frame.getContentPane().add(btnSignIn);
 		
-		btnNewButton_1 = new JButton("New button");
-		btnNewButton_1.setBounds(221, 469, 97, 23);
-		frame.getContentPane().add(btnNewButton_1);
-		
-		lblLogin = new JLabel("Sign in");
-		lblLogin.setBounds(178, 256, 57, 15);
-		frame.getContentPane().add(lblLogin);
+		btnSignUp = new JButton("Sign Up");
+		btnSignUp.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Register();
+			}
+		});
+		btnSignUp.setBounds(221, 469, 97, 23);
+		frame.getContentPane().add(btnSignUp);
 		
 		textId = new JTextField();
 		textId.setBounds(169, 296, 116, 21);
@@ -77,7 +91,7 @@ public class mainFrame {
 		textId.setColumns(10);
 		
 		textPassword = new JTextField();
-		textPassword.setBounds(178, 351, 116, 21);
+		textPassword.setBounds(169, 351, 116, 21);
 		frame.getContentPane().add(textPassword);
 		textPassword.setColumns(10);
 		
@@ -85,4 +99,26 @@ public class mainFrame {
 		lblProject.setBounds(178, 87, 57, 15);
 		frame.getContentPane().add(lblProject);
 	}
+
+
+
+	protected void logIn() {
+		String id = textId.getText();
+		String password = textPassword.getText();
+		boolean result = dao.login(id, password);
+		if (result != true) {
+			JOptionPane.showMessageDialog(frame, "다시 입력하세요");
+		} 
+		MainProgramFrame app = new MainProgramFrame();
+		app.setVisible(true);
+		frame.dispose();
+	}
+	
+	
+	protected void Register() {
+		RegisterFrame app = new RegisterFrame();
+		app.setVisible(true);
+		
+	}
+	
 }

@@ -21,6 +21,14 @@ public class Join implements Serializable {
 	
 	public Join() {}
 
+	public Join(String name, String id, String password, String email) {
+		this.name = name;
+		this.id = id;
+		this.password = password;
+		this.email = email;
+	}
+
+	
 	public Join(Integer no, String name, String id, String password, String email) {
 		this.no = no;
 		this.name = name;

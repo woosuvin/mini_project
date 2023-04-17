@@ -26,7 +26,7 @@ public interface JoinDao {
 	 * 로그인
 	 * @param id
 	 * @param password
-	 * @return
+	 * @return 성공 true 실패 false
 	 */
 	public boolean login(String id, String password);
 	
