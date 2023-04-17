@@ -105,13 +105,17 @@ public class LogInFrame {
 	protected void logIn() {
 		String id = textId.getText();
 		String password = textPassword.getText();
-		boolean result = dao.login(id, password);
-		if (result != true) {
-			JOptionPane.showMessageDialog(frame, "다시 입력하세요");
-		} 
-		MainProgramFrame app = new MainProgramFrame();
-		app.setVisible(true);
-		frame.dispose();
+		
+		try {
+			if (dao.login(id, password)) {
+				frame.setVisible(false);
+				// TODO main 프레임 띄움
+			} else {
+				JOptionPane.showMessageDialog(frame, "다시 입력하세요");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	

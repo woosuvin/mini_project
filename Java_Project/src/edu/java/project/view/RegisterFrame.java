@@ -16,6 +16,8 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+import edu.java.project.view.MainProgramFrame;
+
 public class RegisterFrame extends JFrame {
 	JoinDaoImpl dao = new JoinDaoImpl();
 
@@ -31,6 +33,11 @@ public class RegisterFrame extends JFrame {
 	private JButton btnCancel;
 	private JLabel lblNewName;
 	private JFrame frame;
+	private JLabel lblIdMsg;
+	private JLabel lblEmailMsg;
+	
+	
+	
 
 	/**
 	 * Launch the application.
@@ -53,7 +60,7 @@ public class RegisterFrame extends JFrame {
 	 */
 	public RegisterFrame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 554, 436);
+		setBounds(100, 100, 450, 600);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -61,29 +68,29 @@ public class RegisterFrame extends JFrame {
 		contentPane.setLayout(null);
 		
 		lblNewId = new JLabel("ID");
-		lblNewId.setBounds(88, 105, 50, 15);
+		lblNewId.setBounds(12, 116, 50, 15);
 		contentPane.add(lblNewId);
 		
 		lblNewPWD = new JLabel("PWD");
-		lblNewPWD.setBounds(88, 156, 50, 15);
+		lblNewPWD.setBounds(12, 167, 50, 15);
 		contentPane.add(lblNewPWD);
 		
 		lblNewEmail = new JLabel("Email");
-		lblNewEmail.setBounds(88, 215, 50, 15);
+		lblNewEmail.setBounds(12, 226, 50, 15);
 		contentPane.add(lblNewEmail);
 		
 		textNewId = new JTextField();
-		textNewId.setBounds(244, 102, 96, 21);
+		textNewId.setBounds(130, 116, 96, 21);
 		contentPane.add(textNewId);
 		textNewId.setColumns(10);
 		
 		textnewPWD = new JTextField();
-		textnewPWD.setBounds(244, 153, 96, 21);
+		textnewPWD.setBounds(130, 167, 96, 21);
 		contentPane.add(textnewPWD);
 		textnewPWD.setColumns(10);
 		
 		textNewEmail = new JTextField();
-		textNewEmail.setBounds(244, 212, 96, 21);
+		textNewEmail.setBounds(130, 226, 96, 21);
 		contentPane.add(textNewEmail);
 		textNewEmail.setColumns(10);
 		
@@ -94,7 +101,7 @@ public class RegisterFrame extends JFrame {
 				
 			}
 		});
-		btnSignUp.setBounds(106, 320, 91, 23);
+		btnSignUp.setBounds(30, 331, 91, 23);
 		contentPane.add(btnSignUp);
 		
 		btnCancel = new JButton("Cancel");
@@ -103,18 +110,50 @@ public class RegisterFrame extends JFrame {
 				cancel();
 			}
 		});
-		btnCancel.setBounds(317, 320, 91, 23);
+		btnCancel.setBounds(241, 331, 91, 23);
 		contentPane.add(btnCancel);
 		
 		lblNewName = new JLabel("Name");
-		lblNewName.setBounds(88, 41, 50, 15);
+		lblNewName.setBounds(12, 52, 50, 15);
 		contentPane.add(lblNewName);
 		
 		textNewName = new JTextField();
-		textNewName.setBounds(244, 38, 96, 21);
+		textNewName.setBounds(130, 52, 96, 21);
 		contentPane.add(textNewName);
 		textNewName.setColumns(10);
+		
+		JButton btnIdCheck = new JButton("중복 확인");
+		btnIdCheck.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				btnIdCheck();
+			}
+		});
+		btnIdCheck.setBounds(264, 116, 91, 23);
+		contentPane.add(btnIdCheck);
+		
+		JButton btnEmailCheck = new JButton("중복 확인");
+		btnEmailCheck.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				btnEmailCheck();
+			}
+		});
+		btnEmailCheck.setBounds(264, 225, 91, 23);
+		contentPane.add(btnEmailCheck);
+		
+		lblIdMsg = new JLabel("");
+		lblIdMsg.setBounds(264, 149, 143, 15);
+		contentPane.add(lblIdMsg);
+		
+		lblEmailMsg = new JLabel("");
+		lblEmailMsg.setBounds(264, 255, 143, 15);
+		contentPane.add(lblEmailMsg);
 	}
+
+
+
+
 
 
 
@@ -126,6 +165,8 @@ public class RegisterFrame extends JFrame {
 		
 		Join newUser = new Join(name, id, password, email);
 		
+		System.out.println(newUser);
+		
 		int result = dao.userRegister(newUser);
 		if (result != 1) {
 			JOptionPane.showMessageDialog(frame, "회원가입 실패");
@@ -133,12 +174,42 @@ public class RegisterFrame extends JFrame {
 		}
 		JOptionPane.showMessageDialog(frame, "회원가입이 완료되었습니다");
 		
-		MainProgramFrame app = new MainProgramFrame();
-		app.setVisible(true);
-		this.frame.dispose();
+//		MainProgramFrame app = new MainProgramFrame();
+//		app.setVisible(true);
+		// TODO 로그인 프레임 띄움
+		dispose();
 	}
 	
 	protected void cancel() {
 		dispose();
+	}
+	
+	
+	
+	protected void btnIdCheck() {
+		try {
+			if (dao.checkId(textNewId.getText())) {
+				lblIdMsg.setText("중복되는 ID 입니다.");
+				textNewId.setText("");
+			} else {
+				lblIdMsg.setText("사용 가능한 ID 입니다.");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	
+	protected void btnEmailCheck() {
+		try {
+			if (dao.checkEmail(textNewEmail.getText())) {
+				lblEmailMsg.setText("중복되는 Email 입니다.");
+				textNewId.setText("");
+			} else {
+				lblEmailMsg.setText("사용 가능한 Email 입니다.");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

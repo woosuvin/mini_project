@@ -15,6 +15,9 @@ import java.sql.Statement;
 
 public class JoinDaoImpl implements JoinDao {
 	
+	private boolean idCheckResult = false;
+	private boolean emailCheckResult = false;
+	
 	private Connection getConnection() throws SQLException {
 		DriverManager.registerDriver(new OracleDriver());
 		Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
@@ -31,8 +34,8 @@ public class JoinDaoImpl implements JoinDao {
 		closeResources(conn, stmt);
 	}
 	
-	private static final String SQL_CHECKID = String.format("select count(%s) from %s where %s = ?", 
-			COL_ID, TBL_NAME, COL_ID);
+	private static final String SQL_CHECKID = String.format("select %s from %s", 
+			COL_ID, TBL_NAME);
 	@Override // id 중복 체크
 	public boolean checkId(String id) {
 		Connection conn = null;
@@ -43,13 +46,12 @@ public class JoinDaoImpl implements JoinDao {
 			conn = getConnection();
 			stmt = conn.prepareStatement(SQL_CHECKID);
 			System.out.println(SQL_CHECKID);
-			
-			stmt.setString(1, id);
 			rs = stmt.executeQuery();
 			
-			rs.next(); // 행
-			if (rs.getInt(1) == 1) {
-				return true;
+			while (rs.next()) {
+				if (rs.getString(COL_ID).equals(id)) { // 중복되면
+					idCheckResult = true;
+				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -60,14 +62,13 @@ public class JoinDaoImpl implements JoinDao {
 				e.printStackTrace();
 			}
 		}
-		return false;
+		return idCheckResult;
 	}
 
-	private static final String SQL_CHECKEMAIL = String.format("select count(%s) from %s where %s = ?", 
-			COL_EMAIL, TBL_NAME, COL_EMAIL);
+	private static final String SQL_CHECKEMAIL = String.format("select %s from %s", 
+			COL_EMAIL, TBL_NAME);
 	@Override // 이메일 중복 체크
 	public boolean checkEmail(String email) {
-		
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
@@ -75,12 +76,12 @@ public class JoinDaoImpl implements JoinDao {
 		try {
 			conn = getConnection();
 			stmt = conn.prepareStatement(SQL_CHECKEMAIL);
-			stmt.setString(1, email);
 			rs = stmt.executeQuery();
 			
-			rs.next(); // 행
-			if (rs.getInt(1) == 1) {
-				return true;
+			while (rs.next()) {
+				if (rs.getString(COL_EMAIL).equals(email)) { // 중복되면
+					emailCheckResult = true;
+				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -91,7 +92,7 @@ public class JoinDaoImpl implements JoinDao {
 				e.printStackTrace();
 			}
 		}
-		return false;
+		return emailCheckResult;
 	}
 	
 	private static final String SQL_USER_REGISTER = String.format("insert into %s (%s, %s, %s, %s) values (?, ?, ?, ?)", 
@@ -107,10 +108,10 @@ public class JoinDaoImpl implements JoinDao {
 			stmt = conn.prepareStatement(SQL_USER_REGISTER);
 			System.out.println(SQL_USER_REGISTER);
 			
-			stmt.setString(1, COL_NAME);
-			stmt.setString(2, COL_ID);
-			stmt.setString(3, COL_PASSWORD);
-			stmt.setString(4, COL_EMAIL);
+			stmt.setString(1, user.getName());
+			stmt.setString(2, user.getId());
+			stmt.setString(3, user.getPassword());
+			stmt.setString(4, user.getEmail());
 			result = stmt.executeUpdate();
 			
 			System.out.println("회원가입 완료");
