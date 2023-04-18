@@ -2,6 +2,7 @@ package edu.java.project.view;
 
 import java.awt.Component;
 import java.awt.EventQueue;
+import java.awt.Frame;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -10,6 +11,7 @@ import javax.swing.border.EmptyBorder;
 import edu.java.project.model.Content;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -40,6 +42,8 @@ public class CreateFrame extends JFrame {
 	private final ContentDaoImpl dao = ContentDaoImpl.getInstance();
 	private Component parent; // 부모 컴포넌트(JFrame)를 저장하기 위한 필드
 	private MainProgramFrame app; // notifyContentCreated 메서드를 가지고 있는 객체
+//	ContentDaoImpl dao = new ContentDaoImpl();
+	private LogInFrame logApp;
 
 	/**
 	 * Launch the application.
@@ -56,6 +60,19 @@ public class CreateFrame extends JFrame {
 			}
 		});
 	}
+	
+//	public static void showContactCreateFrame() {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					CreateFrame frame = new CreateFrame();
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 
 	/**
 	 * Create the frame.
@@ -63,6 +80,10 @@ public class CreateFrame extends JFrame {
 	public CreateFrame(Component parent, MainProgramFrame app) {
 		this.parent = parent;
 		this.app = app;
+		initialize();
+	}
+	
+	public CreateFrame() {
 		initialize();
 	}
 	
@@ -151,13 +172,22 @@ public class CreateFrame extends JFrame {
 		
 		btnCancel = new JButton("Cancel");
 		btnCancel.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
+				cancelCreateContent();
 			}
 		});
 		btnCancel.setBounds(256, 530, 91, 23);
 		contentPane.add(btnCancel);
 	}
 	
+	protected void cancelCreateContent() {
+		int confrim = JOptionPane.showConfirmDialog(parent, "작성을 취소하시겠습니까?", "Cancel", JOptionPane.YES_NO_OPTION);
+		if (confrim == JOptionPane.YES_OPTION) {
+			dispose();
+		}
+	}
+
 	protected void handleRadioButtonClick(ActionEvent event) {
 		JRadioButton btn = (JRadioButton)event.getSource(); // 클릭 이벤트가 발생한 이벤트 소스(라디오버튼)을 찾음
 		String btnText = btn.getText(); // 라디오버튼의 텍스트를 찾음
@@ -176,7 +206,7 @@ public class CreateFrame extends JFrame {
 		String title = textTitle.getText();
 		String comment = textComment.getText();
 		LocalDateTime date = LocalDateTime.now();
-		Content content = new Content(0, null, category, title, comment, date, date);
+		Content content = new Content(0, category, title, comment, date, date);
 		dao.create(content);
 		app.notifyContentCreated();
 		dispose();

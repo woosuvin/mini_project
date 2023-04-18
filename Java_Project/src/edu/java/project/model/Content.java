@@ -37,6 +37,17 @@ public class Content implements Serializable {
 		this.modifiedTime = modifiedTime;
 	}
 	
+	public Content(int no, String ctgr, String title, String content, LocalDateTime createTime, LocalDateTime modifiedTime) {
+		super();
+		this.no = no;
+//		this.id = id;
+		this.ctgr = ctgr;
+		this.title = title;
+		this.content = content;
+		this.createTime = createTime;
+		this.modifiedTime = modifiedTime;
+	}
+	
 	public int getNo() {
 		return no;
 	}

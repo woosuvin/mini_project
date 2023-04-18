@@ -73,7 +73,7 @@ public class ContentDaoImpl implements ContentDao {
 	}
 
 	
-	private static final String SQL_SELECT_BY_KEYWORD = String.format("select * from %s where lower(%s) like lower(%?%) order by %s",
+	private static final String SQL_SELECT_BY_KEYWORD = String.format("select * from %s where lower(%s) like lower(?) order by %s",
 			TBL_NAME, COL_TITLE, COL_NO);
 	@Override
 	public List<Content> read(String keyword) {
@@ -86,7 +86,7 @@ public class ContentDaoImpl implements ContentDao {
 			conn = getConnection();
 			System.out.println(SQL_SELECT_BY_KEYWORD);
 			stmt = conn.prepareStatement(SQL_SELECT_BY_KEYWORD);
-			stmt.setString(1, keyword);
+			stmt.setString(1, "%" + keyword + "%");
 			rs = stmt.executeQuery();
 			
 			while (rs.next()) {
@@ -130,14 +130,14 @@ public class ContentDaoImpl implements ContentDao {
 			
 			while (rs.next()) {
 				int no = rs.getInt(COL_NO);
-				String id = rs.getString(COL_ID);
+//				String id = rs.getString(COL_ID);
 				String ctgr = rs.getString(COL_CTGR);
 				String title = rs.getString(COL_TITLE);
 				String contents = rs.getString(COL_CONTENT);
 				LocalDateTime createTime = rs.getTimestamp(COL_CDATE).toLocalDateTime();
 				LocalDateTime modifiedTime = rs.getTimestamp(COL_MDATE).toLocalDateTime();
 				
-				Content content = new Content(no, id, ctgr, title, contents, createTime, modifiedTime);
+				Content content = new Content(no, ctgr, title, contents, createTime, modifiedTime);
 				list.add(content);
 			}
 		} catch (SQLException e) {

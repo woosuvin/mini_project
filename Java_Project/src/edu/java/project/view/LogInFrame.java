@@ -12,15 +12,18 @@ import java.awt.event.ActionEvent;
 
 import edu.java.project.controller.JoinDaoImpl;
 
+//import edu.java.project.view.MainProgramFrame;
+
 public class LogInFrame {
 	JoinDaoImpl dao = new JoinDaoImpl();
+//	MainProgramFrame main = new MainProgramFrame();
 
 	private JFrame frame;
 	private JButton btnSignUp;
 	private JButton btnSignIn;
 	private JLabel lblId;
 	private JLabel lblPassword;
-	private JTextField textId;
+	public JTextField textId;
 	private JTextField textPassword;
 	private JLabel lblProject;
 
@@ -110,6 +113,8 @@ public class LogInFrame {
 			if (dao.login(id, password)) {
 				frame.setVisible(false);
 				// TODO main 프레임 띄움
+				Main();
+				
 			} else {
 				JOptionPane.showMessageDialog(frame, "다시 입력하세요");
 			}
@@ -119,10 +124,16 @@ public class LogInFrame {
 	}
 	
 	
+	protected void Main() {
+		MainProgramFrame app = new MainProgramFrame();
+		app.frame.setVisible(true);
+	}
+	
 	protected void Register() {
 		RegisterFrame app = new RegisterFrame();
 		app.setVisible(true);
 		
 	}
+	
 	
 }

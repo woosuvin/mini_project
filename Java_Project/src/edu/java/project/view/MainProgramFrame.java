@@ -13,13 +13,15 @@ import javax.swing.JButton;
 import edu.java.project.controller.ContentDaoImpl;
 import edu.java.project.model.Content;
 import java.awt.event.ActionListener;
+import java.time.LocalDateTime;
 import java.awt.event.ActionEvent;
+import javax.swing.JLabel;
 
-public class MainProgramFrame {
+public class MainProgramFrame extends JFrame {
 	private static final String[] COLUMN_NAMES = {"category", "title", "comment", "date"}; // 테이블 컬럼 이름
 	
 	
-	private JFrame frame;
+	public JFrame frame;
 	private JTable table;
 	private JScrollPane scrollPane;
 	private JButton btnNewContent;
@@ -31,7 +33,9 @@ public class MainProgramFrame {
 	private DefaultTableModel model; // 테이블의 데이터, 컬럼 이름 등을 관리하는 객체.
 	private final ContentDaoImpl dao = ContentDaoImpl.getInstance(); // 컨텐츠 정보 관리 객체(Controller)
 	private List<Content> contentList; // DB 테이블에서 검색한 결과를 저장할 리스트.
-
+	private JLabel lblUserName;
+	LogInFrame logApp;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -94,13 +98,14 @@ public class MainProgramFrame {
 		frame.getContentPane().add(scrollPane);
 		
 		table = new JTable();
-		table.setModel(new DefaultTableModel(
-			new Object[][] {
-			},
-			new String[] {
-				"category", "title", "comment", "date"
-			}
-		));
+		resetTableModel();
+//		table.setModel(new DefaultTableModel(
+//			new Object[][] {
+//			},
+//			new String[] {
+//				"category", "title", "comment", "date"
+//			}
+//		));
 		scrollPane.setViewportView(table);
 		
 		btnNewContent = new JButton("New");
@@ -108,6 +113,7 @@ public class MainProgramFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 //				CreateFrame.
+				showCreateFrame();
 			}
 		});
 		btnNewContent.setBounds(12, 10, 91, 23);
@@ -131,7 +137,9 @@ public class MainProgramFrame {
 		
 		btnDelete = new JButton("Delete");
 		btnDelete.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
+				
 			}
 		});
 		btnDelete.setBounds(115, 43, 91, 23);
@@ -144,6 +152,15 @@ public class MainProgramFrame {
 		});
 		btnSignOut.setBounds(333, 10, 91, 23);
 		frame.getContentPane().add(btnSignOut);
+		
+		lblUserName = new JLabel("");
+		lblUserName.setBounds(333, 51, 91, 15);
+		frame.getContentPane().add(lblUserName);
+	}
+
+	protected void showCreateFrame() {
+		CreateFrame cApp = new CreateFrame();
+		cApp.setVisible(true);
 	}
 
 }
