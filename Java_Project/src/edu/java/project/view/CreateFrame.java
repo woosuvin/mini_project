@@ -41,7 +41,7 @@ public class CreateFrame extends JFrame {
 	
 	private final ContentDaoImpl dao = ContentDaoImpl.getInstance();
 	private Component parent; // 부모 컴포넌트(JFrame)를 저장하기 위한 필드
-	private MainProgramFrame app; // notifyContentCreated 메서드를 가지고 있는 객체
+	MainProgramFrame app = new MainProgramFrame(); // notifyContentCreated 메서드를 가지고 있는 객체
 //	ContentDaoImpl dao = new ContentDaoImpl();
 	private LogInFrame logApp;
 

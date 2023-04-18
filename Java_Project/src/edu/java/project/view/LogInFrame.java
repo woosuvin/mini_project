@@ -14,7 +14,7 @@ import edu.java.project.controller.JoinDaoImpl;
 
 //import edu.java.project.view.MainProgramFrame;
 
-public class LogInFrame {
+public class LogInFrame extends JFrame {
 	JoinDaoImpl dao = new JoinDaoImpl();
 //	MainProgramFrame main = new MainProgramFrame();
 

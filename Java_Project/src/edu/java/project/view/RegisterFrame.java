@@ -173,15 +173,14 @@ public class RegisterFrame extends JFrame {
 			return;
 		}
 		JOptionPane.showMessageDialog(frame, "회원가입이 완료되었습니다");
-		
-//		MainProgramFrame app = new MainProgramFrame();
-//		app.setVisible(true);
-		// TODO 로그인 프레임 띄움
 		dispose();
 	}
 	
 	protected void cancel() {
-		dispose();
+		int confirm = JOptionPane.showConfirmDialog(frame, "가입을 취소하시겠습니까?", "Cencel", JOptionPane.YES_NO_OPTION);
+		if (confirm == JOptionPane.YES_OPTION) {
+			dispose();
+		}
 	}
 	
 	
@@ -191,6 +190,7 @@ public class RegisterFrame extends JFrame {
 			if (dao.checkId(textNewId.getText())) {
 				lblIdMsg.setText("중복되는 ID 입니다.");
 				textNewId.setText("");
+				return;
 			} else {
 				lblIdMsg.setText("사용 가능한 ID 입니다.");
 			}

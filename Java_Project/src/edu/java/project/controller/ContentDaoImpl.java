@@ -192,8 +192,8 @@ public class ContentDaoImpl implements ContentDao {
 	}
 
 	
-	private static final String SQL_UPDATE = String.format("update %s set %s = ?, %s = ?, %s = ? where %s = ?", 
-			TBL_NAME, COL_CTGR, COL_TITLE, COL_CONTENT, COL_NO);
+	private static final String SQL_UPDATE = String.format("update %s set %s = ?, %s = ?, %s = sysdate where %s = ?", 
+			TBL_NAME, COL_TITLE, COL_CONTENT, COL_MDATE, COL_NO);
 	@Override
 	public int update(Content content) {
 		int result = 0;
@@ -204,16 +204,17 @@ public class ContentDaoImpl implements ContentDao {
 			conn = getConnection();
 			stmt = conn.prepareStatement(SQL_UPDATE);
 			
-			stmt.setString(1, content.getCtgr());
-			stmt.setString(2, content.getTitle());
-			stmt.setString(3, content.getContent());
-			stmt.setInt(4, content.getNo());
+			stmt.setString(1, content.getTitle());
+			stmt.setString(2, content.getContent());
+			stmt.setInt(3, content.getNo());
+			System.out.println(  content.getTitle() + content.getContent() + content.getNo());
+			
 			result = stmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			try {
-				closeResources(conn, stmt, null);
+				closeResources(conn, stmt);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -240,7 +241,6 @@ public class ContentDaoImpl implements ContentDao {
 			try {
 				closeResources(conn, stmt);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

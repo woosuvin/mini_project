@@ -77,10 +77,15 @@ public class Join implements Serializable {
 		this.email = email;
 	}
 	
+//	@Override
+//	public String toString() {
+//		return String.format("Join | no= %d, name= %s, id= %s, password= %s, email= %s",
+//				no, name, id, password, email);
+//	}
+	
 	@Override
 	public String toString() {
-		return String.format("Join | no= %d, name= %s, id= %s, password= %s, email= %s",
-				no, name, id, password, email);
+		return String.format("Join | name= %s, id= %s, password= %s, email= %s",
+				 name, id, password, email);
 	}
-	
 }
