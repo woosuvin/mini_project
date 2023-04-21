@@ -1,6 +1,8 @@
 package edu.java.project.view;
 
+import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Font;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -17,10 +19,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 import edu.java.project.view.MainProgramFrame;
+import javax.swing.SwingConstants;
 
 public class RegisterFrame extends JFrame {
-	JoinDaoImpl dao = new JoinDaoImpl();
 
+	private final JoinDaoImpl dao = JoinDaoImpl.getInstance();
+	
 	private JPanel contentPane;
 	private JTextField textNewId;
 	private JTextField textnewPWD;
@@ -35,8 +39,11 @@ public class RegisterFrame extends JFrame {
 	private JFrame frame;
 	private JLabel lblIdMsg;
 	private JLabel lblEmailMsg;
+	private JButton btnIdCheck;
+	private JButton btnEmailCheck;
 	
-	
+	private boolean checkIdResult = false;
+	private boolean checkEmailResult = false;
 	
 
 	/**
@@ -59,95 +66,121 @@ public class RegisterFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public RegisterFrame() {
+		setTitle("Sign Up");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 600);
+		setBounds(700, 100, 600, 600);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		Color color = new Color(248, 248, 255);
+		contentPane.setBackground(color);
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
 		lblNewId = new JLabel("ID");
-		lblNewId.setBounds(12, 116, 50, 15);
+		lblNewId.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblNewId.setFont(new Font("D2Coding", Font.BOLD, 15));
+		lblNewId.setBounds(60, 150, 100, 30);
 		contentPane.add(lblNewId);
 		
 		lblNewPWD = new JLabel("PWD");
-		lblNewPWD.setBounds(12, 167, 50, 15);
+		lblNewPWD.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblNewPWD.setFont(new Font("D2Coding", Font.BOLD, 15));
+		lblNewPWD.setBounds(60, 250, 100, 30);
 		contentPane.add(lblNewPWD);
 		
 		lblNewEmail = new JLabel("Email");
-		lblNewEmail.setBounds(12, 226, 50, 15);
+		lblNewEmail.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblNewEmail.setFont(new Font("D2Coding", Font.BOLD, 15));
+		lblNewEmail.setBounds(60, 350, 100, 30);
 		contentPane.add(lblNewEmail);
 		
 		textNewId = new JTextField();
-		textNewId.setBounds(130, 116, 96, 21);
+		textNewId.setBounds(220, 150, 160, 30);
 		contentPane.add(textNewId);
 		textNewId.setColumns(10);
 		
 		textnewPWD = new JTextField();
-		textnewPWD.setBounds(130, 167, 96, 21);
+		textnewPWD.setBounds(220, 250, 160, 30);
 		contentPane.add(textnewPWD);
 		textnewPWD.setColumns(10);
 		
 		textNewEmail = new JTextField();
-		textNewEmail.setBounds(130, 226, 96, 21);
+		textNewEmail.setBounds(220, 350, 160, 30);
 		contentPane.add(textNewEmail);
 		textNewEmail.setColumns(10);
 		
 		btnSignUp = new JButton("Sign Up");
+		btnSignUp.setBorderPainted(false);
+		btnSignUp.setContentAreaFilled(false);
+		btnSignUp.setFont(new Font("D2Coding", Font.BOLD, 15));
 		btnSignUp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				signUp();
-				
 			}
 		});
-		btnSignUp.setBounds(30, 331, 91, 23);
+		btnSignUp.setBounds(95, 487, 100, 30);
 		contentPane.add(btnSignUp);
 		
 		btnCancel = new JButton("Cancel");
+		btnCancel.setBorderPainted(false);
+		btnCancel.setContentAreaFilled(false);
+		btnCancel.setFont(new Font("D2Coding", Font.BOLD, 15));
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				cancel();
 			}
 		});
-		btnCancel.setBounds(241, 331, 91, 23);
+		btnCancel.setBounds(372, 487, 100, 30);
 		contentPane.add(btnCancel);
 		
 		lblNewName = new JLabel("Name");
-		lblNewName.setBounds(12, 52, 50, 15);
+		lblNewName.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblNewName.setFont(new Font("D2Coding", Font.BOLD, 15));
+		lblNewName.setBounds(60, 60, 100, 30);
 		contentPane.add(lblNewName);
 		
 		textNewName = new JTextField();
-		textNewName.setBounds(130, 52, 96, 21);
+		textNewName.setBounds(220, 60, 160, 30);
 		contentPane.add(textNewName);
 		textNewName.setColumns(10);
 		
-		JButton btnIdCheck = new JButton("중복 확인");
+		btnIdCheck = new JButton("중복 확인");
+		btnIdCheck.setBorderPainted(false);
+		btnIdCheck.setContentAreaFilled(false);
+		btnIdCheck.setFont(new Font("D2Coding", Font.BOLD, 13));
 		btnIdCheck.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				btnIdCheck();
 			}
 		});
-		btnIdCheck.setBounds(264, 116, 91, 23);
+		btnIdCheck.setBounds(409, 153, 100, 25);
 		contentPane.add(btnIdCheck);
 		
-		JButton btnEmailCheck = new JButton("중복 확인");
+		btnEmailCheck = new JButton("중복 확인");
+		btnEmailCheck.setBorderPainted(false);
+		btnEmailCheck.setContentAreaFilled(false);
+		btnEmailCheck.setFont(new Font("D2Coding", Font.BOLD, 13));
 		btnEmailCheck.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				btnEmailCheck();
 			}
 		});
-		btnEmailCheck.setBounds(264, 225, 91, 23);
+		btnEmailCheck.setBounds(409, 353, 100, 25);
 		contentPane.add(btnEmailCheck);
 		
 		lblIdMsg = new JLabel("");
-		lblIdMsg.setBounds(264, 149, 143, 15);
+		lblIdMsg.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblIdMsg.setFont(new Font("D2Coding", Font.PLAIN, 12));
+		lblIdMsg.setBounds(309, 189, 200, 20);
 		contentPane.add(lblIdMsg);
 		
 		lblEmailMsg = new JLabel("");
-		lblEmailMsg.setBounds(264, 255, 143, 15);
+		lblEmailMsg.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblEmailMsg.setFont(new Font("D2Coding", Font.PLAIN, 12));
+		lblEmailMsg.setBounds(309, 390, 200, 20);
 		contentPane.add(lblEmailMsg);
 	}
 
@@ -158,26 +191,34 @@ public class RegisterFrame extends JFrame {
 
 
 	protected void signUp() {
+		Join newUser = null;
 		String name = textNewName.getText();
 		String id = textNewId.getText();
 		String password = textnewPWD.getText();
 		String email = textNewEmail.getText();
-		
-		Join newUser = new Join(name, id, password, email);
+		if (name.equals("") || id.equals("") || password.equals("") || email.equals("")) {
+			JOptionPane.showMessageDialog(contentPane, "항목을 입력하세요");
+			return;
+		}
+		if (checkIdResult == false ||checkEmailResult == false) {
+			JOptionPane.showMessageDialog(contentPane, "중복 확인을 하세요");
+			return;
+		}
+		newUser = new Join(name, id, password, email);
 		
 		System.out.println(newUser);
 		
 		int result = dao.userRegister(newUser);
 		if (result != 1) {
-			JOptionPane.showMessageDialog(frame, "회원가입 실패");
+			JOptionPane.showMessageDialog(contentPane, "회원가입 실패");
 			return;
 		}
-		JOptionPane.showMessageDialog(frame, "회원가입이 완료되었습니다");
+		JOptionPane.showMessageDialog(contentPane, "회원가입이 완료되었습니다");
 		dispose();
 	}
 	
 	protected void cancel() {
-		int confirm = JOptionPane.showConfirmDialog(frame, "가입을 취소하시겠습니까?", "Cencel", JOptionPane.YES_NO_OPTION);
+		int confirm = JOptionPane.showConfirmDialog(contentPane, "가입을 취소하시겠습니까?", "Cencel", JOptionPane.YES_NO_OPTION);
 		if (confirm == JOptionPane.YES_OPTION) {
 			dispose();
 		}
@@ -185,31 +226,38 @@ public class RegisterFrame extends JFrame {
 	
 	
 	
-	protected void btnIdCheck() {
+	protected boolean btnIdCheck() {
 		try {
-			if (dao.checkId(textNewId.getText())) {
-				lblIdMsg.setText("중복되는 ID 입니다.");
-				textNewId.setText("");
-				return;
-			} else {
+			if (textNewId.getText().equals("")) {
+				lblIdMsg.setText("입력하세요.");
+			} else if (dao.checkId(textNewId.getText())) { // 사용 가능
 				lblIdMsg.setText("사용 가능한 ID 입니다.");
+				checkIdResult = true;
+			} else if (!dao.checkId(textNewId.getText())) {
+				lblIdMsg.setText("중복되는 ID 입니다.");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return checkIdResult;
 	}
 
 	
-	protected void btnEmailCheck() {
+	protected boolean btnEmailCheck() {
 		try {
-			if (dao.checkEmail(textNewEmail.getText())) {
-				lblEmailMsg.setText("중복되는 Email 입니다.");
-				textNewId.setText("");
-			} else {
+			if (textNewEmail.getText().equals("")) {
+				lblEmailMsg.setText("입력하세요.");
+			} else if (dao.checkEmail(textNewEmail.getText())) { // 사용 가능
 				lblEmailMsg.setText("사용 가능한 Email 입니다.");
+				checkEmailResult = true;
+			} else if (!dao.checkEmail(textNewEmail.getText())){
+				lblEmailMsg.setText("중복되는 Email 입니다.");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return checkEmailResult;
 	}
+	 
+	
 }

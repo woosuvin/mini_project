@@ -6,28 +6,6 @@ import edu.java.project.model.Content;
 
 public interface ContentDao {
 	
-//	/**
-//	 * 새 코멘트 저장
-//	 * @param c 리스트에 저장할 코멘트 객체
-//	 * @return 리스트에 저장 성공하면 1 실패하면 0
-//	 */
-//	int create(Content c);
-//	
-//	/**
-//	 * 코멘트 전체 보기 기능. 저장된 코멘트 개수 크기의 코멘트 리스트 리턴
-//	 * @return 코멘트 리스트
-//	 */
-//	List<Content> read();
-//	
-//	/**
-//	 * 인덱스? 제목? 으로 검색 argument로 전달받은 인덱스 위치에 있는 코멘트 리런
-//	 * @param 
-//	 */
-//	Content read(int index);
-//	
-//	/**
-//	 * 
-//	 */
 	
 	/**
 	 * 컨텐츠 정보를 DB contents 테이블에 insert

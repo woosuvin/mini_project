@@ -1,23 +1,33 @@
 package edu.java.project.view;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.EventQueue;
+import java.awt.Font;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 
 import edu.java.project.controller.ContentDaoImpl;
 import edu.java.project.model.Content;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.awt.event.ActionEvent;
+import javax.swing.JScrollPane;
 
 public class MyFrame extends JFrame {
-
+	
 	private final ContentDaoImpl dao = ContentDaoImpl.getInstance();
 	private JPanel contentPane;
 	private JLabel lblDate;
@@ -26,10 +36,16 @@ public class MyFrame extends JFrame {
 	private JTextField textDate;
 	private JTextField textTitle;
 	private JTextField textCategory;
-	private JTextField textComment;
+	private JTextArea textComment;
 	private Component parent;
 	MainProgramFrame app = new MainProgramFrame();
-	private int no;
+	private int no; // 선택한 행 숫자 저장
+	private JLabel lblComment;
+	private JButton btnClose;
+	
+	private List<Content> contentList;
+	private DefaultTableModel model;
+	private JScrollPane scrollPane;
 	
 	/**
 	 * Launch the application.
@@ -38,7 +54,7 @@ public class MyFrame extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					MyFrame frame = new MyFrame();
+					MyFrame frame = new MyFrame(parent, no, app);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -60,18 +76,15 @@ public class MyFrame extends JFrame {
 	
 	public void readContent() {
 		Content content = dao.read(no);
-		textCategory.setText(content.getContent());
+		textCategory.setText(content.getCtgr());
 		textTitle.setText(content.getTitle());
 		textComment.setText(content.getContent());
-		textDate.setText(content.getModifiedTime().toString());
+		textDate.setText(content.getModifiedTime().format(DateTimeFormatter.ofPattern("yyyy. MM. dd")));
 	}
 	
-	public MyFrame() {
-		initialize();
-		
-	}
 	
 	public void initialize() {
+		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // 현재 창만 닫음
 		
 		int x = 100;
@@ -81,68 +94,95 @@ public class MyFrame extends JFrame {
 			y = parent.getY();
 		}
 		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(x, y, 450, 600);
+		setBounds(x + 600, y, 600, 600);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		Color color = new Color(248, 248, 255);
+		contentPane.setBackground(color);
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
 		lblDate = new JLabel("Date");
-		lblDate.setBounds(12, 38, 50, 15);
+		lblDate.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblDate.setFont(new Font("D2Coding", Font.PLAIN, 15));
+		lblDate.setBounds(15, 40, 100, 30);
 		contentPane.add(lblDate);
 		
 		lblTitle = new JLabel("Title");
-		lblTitle.setBounds(12, 80, 50, 15);
+		lblTitle.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblTitle.setFont(new Font("D2Coding", Font.PLAIN, 15));
+		lblTitle.setBounds(15, 80, 100, 30);
 		contentPane.add(lblTitle);
 		
 		lblCategory = new JLabel("Category");
-		lblCategory.setBounds(12, 132, 50, 15);
+		lblCategory.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblCategory.setFont(new Font("D2Coding", Font.PLAIN, 15));
+		lblCategory.setBounds(15, 120, 100, 30);
 		contentPane.add(lblCategory);
 		
-		JLabel lblComment = new JLabel("Comment");
-		lblComment.setBounds(12, 192, 50, 15);
+		lblComment = new JLabel("Comment");
+		lblComment.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblComment.setFont(new Font("D2Coding", Font.PLAIN, 15));
+		lblComment.setBounds(15, 160, 100, 30);
 		contentPane.add(lblComment);
 		
 		textDate = new JTextField();
-//		textDate.setText(dao.read(no).getModifiedTime().toString()); // TODO값 지정
+		textDate.setFont(new Font("D2Coding", Font.PLAIN, 15));
+		textDate.setDisabledTextColor(Color.black);
 		textDate.setEnabled(false); // 고정
-		textDate.setBounds(112, 35, 224, 21);
+		textDate.setBounds(160, 40, 380, 30);
 		contentPane.add(textDate);
 		textDate.setColumns(10);
+		textDate.setBorder(BorderFactory.createEmptyBorder());
+		
 		
 		textTitle = new JTextField();
-//		textTitle.setText(dao.read(no).getTitle()); // 값 지정
+		textTitle.setFont(new Font("D2Coding", Font.PLAIN, 15));
+		textTitle.setDisabledTextColor(Color.black);
 		textTitle.setEnabled(false); // 고정
 		textTitle.setColumns(10);
-		textTitle.setBounds(112, 77, 224, 21);
+		textTitle.setBounds(160, 80, 380, 30);
 		contentPane.add(textTitle);
+		textTitle.setBorder(BorderFactory.createEmptyBorder());
+		
 		
 		textCategory = new JTextField();
-//		textCategory.setText(dao.read(no).getCtgr()); // 값 지정
+		textCategory.setFont(new Font("D2Coding", Font.PLAIN, 15));
+		textCategory.setDisabledTextColor(Color.black);
 		textCategory.setEnabled(false); // 고정
 		textCategory.setColumns(10);
-		textCategory.setBounds(112, 129, 224, 21);
+		textCategory.setBounds(160, 120, 380, 30);
 		contentPane.add(textCategory);
+		textCategory.setBorder(BorderFactory.createEmptyBorder());
 		
-		textComment = new JTextField();
-//		textComment.setText(dao.read(no).getContent()); // 값 지정
-		textComment.setEnabled(false); // 고정
-		textComment.setColumns(10);
-		textComment.setBounds(112, 189, 224, 245);
-		contentPane.add(textComment);
 		
-		JButton btnClose = new JButton("Close");
+		btnClose = new JButton("Close");
+		btnClose.setBorderPainted(false);
+		btnClose.setContentAreaFilled(false);
+		btnClose.setFont(new Font("D2Coding", Font.BOLD, 13));
 		btnClose.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				 MyFrame.this.dispose();
 			}
 		});
-		btnClose.setBounds(172, 530, 91, 23);
+		btnClose.setBounds(240, 510, 100, 25);
 		contentPane.add(btnClose);
+		
+		scrollPane = new JScrollPane();
+		scrollPane.setBounds(160, 160, 380, 328);
+		contentPane.add(scrollPane);
+		scrollPane.setBorder(BorderFactory.createEmptyBorder());
+		
+		textComment = new JTextArea();
+		scrollPane.setViewportView(textComment);
+		textComment.setFont(new Font("D2Coding", Font.PLAIN, 15));
+		textComment.setDisabledTextColor(Color.black);
+		textComment.setEnabled(false); // 고정
+		textComment.setColumns(10);
+		textComment.setLineWrap(true);
+		textComment.setWrapStyleWord(true);
+		
 	}
-	
-	
 
 }

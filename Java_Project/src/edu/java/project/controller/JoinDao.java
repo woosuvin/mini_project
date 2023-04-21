@@ -34,5 +34,12 @@ public interface JoinDao {
 	 * 회원탈퇴
 	 */
 	
+	/**
+	 * 회원 정보
+	 * @param id 검색할 primary key
+	 * @return no가 존재하면 Join 타입 객체 리턴 no 없으면 return 리턴
+	 */
+	Join userInfo (String userId);
+	
 }
 

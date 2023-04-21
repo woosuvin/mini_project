@@ -15,8 +15,15 @@ import java.sql.Statement;
 
 public class JoinDaoImpl implements JoinDao {
 	
-	private boolean idCheckResult = false;
-	private boolean emailCheckResult = false;
+	// singleton
+	private static JoinDaoImpl instance = null;
+	private JoinDaoImpl() {}
+	public static JoinDaoImpl getInstance() {
+		if (instance == null) {
+			instance = new JoinDaoImpl();
+		}
+		return instance;
+	}
 	
 	private Connection getConnection() throws SQLException {
 		DriverManager.registerDriver(new OracleDriver());
@@ -34,10 +41,11 @@ public class JoinDaoImpl implements JoinDao {
 		closeResources(conn, stmt);
 	}
 	
-	private static final String SQL_CHECKID = String.format("select %s from %s", 
-			COL_ID, TBL_NAME);
+	private static final String SQL_CHECKID = String.format("select * from %s where %s = ?", 
+			TBL_NAME, COL_ID);
 	@Override // id 중복 체크
 	public boolean checkId(String id) {
+		boolean idCheckResult = true;
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
@@ -45,13 +53,12 @@ public class JoinDaoImpl implements JoinDao {
 		try {
 			conn = getConnection();
 			stmt = conn.prepareStatement(SQL_CHECKID);
+			stmt.setString(1, id.trim());
 			System.out.println(SQL_CHECKID);
 			rs = stmt.executeQuery();
 			
-			while (rs.next()) {
-				if (rs.getString(COL_ID).equals(id)) { // 중복되면
-					idCheckResult = true;
-				}
+			if (rs.next()) {
+				idCheckResult = false; // 레코드 존재하면 false
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -65,10 +72,11 @@ public class JoinDaoImpl implements JoinDao {
 		return idCheckResult;
 	}
 
-	private static final String SQL_CHECKEMAIL = String.format("select %s from %s", 
-			COL_EMAIL, TBL_NAME);
+	private static final String SQL_CHECKEMAIL = String.format("select * from %s where %s = ?", 
+			TBL_NAME, COL_EMAIL);
 	@Override // 이메일 중복 체크
 	public boolean checkEmail(String email) {
+		boolean emailCheckResult = true;
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
@@ -76,12 +84,11 @@ public class JoinDaoImpl implements JoinDao {
 		try {
 			conn = getConnection();
 			stmt = conn.prepareStatement(SQL_CHECKEMAIL);
+			stmt.setString(1, email.trim());
 			rs = stmt.executeQuery();
 			
-			while (rs.next()) {
-				if (rs.getString(COL_EMAIL).equals(email)) { // 중복되면
-					emailCheckResult = true;
-				}
+			if (rs.next()) {
+				emailCheckResult = false; // 레코드 존재하면 false
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -104,6 +111,9 @@ public class JoinDaoImpl implements JoinDao {
 		int result = 0;
 		
 		try {
+			if (user.getName() == null || user.getId() == null || user.getPassword() == null || user.getEmail() == null) {
+				return result;
+			}
 			conn = getConnection();
 			stmt = conn.prepareStatement(SQL_USER_REGISTER);
 			System.out.println(SQL_USER_REGISTER);
@@ -162,6 +172,42 @@ public class JoinDaoImpl implements JoinDao {
 			}
 		}
 		return false;
+	}
+	
+	
+	private static final String SQL_SELECT_USERINFO = String.format("select * from %s where %s = ?"
+			, TBL_NAME, COL_ID);
+	@Override
+	public Join userInfo(String userId) {
+		Join userInfo = null;
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		
+		try {
+			conn = getConnection();
+			stmt = conn.prepareStatement(SQL_SELECT_USERINFO);
+			stmt.setString(1, userId);
+			rs = stmt.executeQuery();
+			
+			if (rs.next()) {
+				int number = rs.getInt(COL_NO);
+				String name = rs.getString(COL_NAME);
+				String id = rs.getString(COL_ID);
+				String password = rs.getString(COL_PASSWORD);
+				String email = rs.getString(COL_EMAIL);
+				userInfo = new Join(number, name, id, password, email);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				closeResources(conn, stmt, rs);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return userInfo;
 	}
 
 }
